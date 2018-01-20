@@ -12,9 +12,7 @@ var app = new Vue({
         minute: ''
       },
     	timers: [
-      	{ name: '计划', type: 1, timestamp: moment().add(5, 'second').valueOf(), countdown: 0, percent: 0 },
-      	{ name: '明天', type: 2, timestamp: moment().add(10, 'second').valueOf(), countdown: 0, percent: 0 },
-      	{ name: '死线', type: 2, timestamp: moment().add(15, 'second').valueOf(), countdown: 0, percent: 0 }
+      	
       ]
     }
   },
@@ -34,14 +32,14 @@ var app = new Vue({
       this.runTimer(true)
     },
     pause: function (timer) {
-      if($(`#btn` + timer.name).val() == "暂停") {
+      if(timer.pause == false) {
+        console.log(timer.pause)
         timer.pause = true
-        $(`#btn` + timer.name).val("继续")
       }
       else {
+        console.log(timer.pause)
         timer.timestamp = moment() + timer.countdown * 1000
         timer.pause = false
-        $(`#btn` + timer.name).val("暂停")
       }
     },
   	format (time, format) {
