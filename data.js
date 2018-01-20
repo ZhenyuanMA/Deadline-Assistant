@@ -5,15 +5,16 @@ var app = new Vue({
       max: 0,
       project: {
         title: '',
+        type: '',
         month: '',
-        day: '',
+        date: '',
         hour: '',
-        minute: '',
+        minute: ''
       },
     	timers: [
-      	{ name: '计划', timestamp: moment().add(5, 'second').valueOf(), countdown: 0, percent: 0 },
-      	{ name: '明天', timestamp: moment().add(10, 'second').valueOf(), countdown: 0, percent: 0 },
-      	{ name: '死线', timestamp: moment().add(15, 'second').valueOf(), countdown: 0, percent: 0 }
+      	{ name: '计划', type: 1, timestamp: moment().add(5, 'second').valueOf(), countdown: 0, percent: 0 },
+      	{ name: '明天', type: 2, timestamp: moment().add(10, 'second').valueOf(), countdown: 0, percent: 0 },
+      	{ name: '死线', type: 2, timestamp: moment().add(15, 'second').valueOf(), countdown: 0, percent: 0 }
       ]
     }
   },
@@ -23,9 +24,25 @@ var app = new Vue({
   },
   methods: {
     set: function (event) {
-      newTimer = { name: this.project.title, timestamp: moment().set({'month': this.project.month - 1, 'date': this.project.date, 'hour': this.project.hour, 'minute': this.project.minute, 'second': 0}).valueOf(), countdown: 0, percent: 0 }
+      if(this.type == '时间点') {
+        newTimer = { name: this.project.title, type: 2, pause: false, timestamp: moment().set({'month': this.project.month - 1, 'date': this.project.date, 'hour': this.project.hour, 'minute': this.project.minute, 'second': 0}).valueOf(), countdown: 0, percent: 0 }
+      }
+      else {
+        newTimer = { name: this.project.title, type: 1, pause: false, timestamp: moment().add({'days': this.project.date, 'hours': this.project.hour, 'minutes': this.project.minute}).valueOf(), countdown: 0, percent: 0 }
+      }
       this.timers.push(newTimer)
       this.runTimer(true)
+    },
+    pause: function (timer) {
+      if($(`#btn` + timer.name).val() == "暂停") {
+        timer.pause = true
+        $(`#btn` + timer.name).val("继续")
+      }
+      else {
+        timer.timestamp = moment() + timer.countdown * 1000
+        timer.pause = false
+        $(`#btn` + timer.name).val("暂停")
+      }
     },
   	format (time, format) {
     	return moment(time).format(format)
@@ -37,16 +54,21 @@ var app = new Vue({
     runTimer (init) {
     	for (let i in this.timers) {
         let timer = this.timers[i]
-        if(moment(timer.timestamp).isBefore(moment())) {
-          timer.countdown = 0
+        if(timer.pause == true) {
+
         }
         else {
-          timer.countdown = Math.floor(moment(timer.timestamp).diff(moment()) / 1000)
-          if (init) {
-            this.max = Math.max(this.max, timer.countdown)
+          if(moment(timer.timestamp).isBefore(moment())) {
+            timer.countdown = 0
           }
           else {
-            timer.percent = timer.countdown / this.max
+            timer.countdown = Math.floor(moment(timer.timestamp).diff(moment()) / 1000)
+            if (init) {
+              this.max = Math.max(this.max, timer.countdown)
+            }
+            else {
+              timer.percent = timer.countdown / this.max
+            }
           }
         }
       }
