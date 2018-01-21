@@ -11,7 +11,7 @@
   <div id="app">
     <h1>Deadline</h1>
     <div class="timeline">
-      <div class="timeline-inner" v-for="timer in timers" :style="{ width: `${timer.percent*100}%` }">
+      <div class="timeline-inner" v-for="timer in timers" :style="{ width: `${timer.percent*100}%`, background: `${timer.color}` }">
       </div>
     </div>
     <div v-for="timer in timers">
@@ -26,6 +26,7 @@
       <option>时间长度</option>
       <option>时间点</option>
     </select>
+    <input placeholder="Timeline Color" class="jscolor" value="965BAB">
     <input v-if="project.type == '时间长度'" v-model="project.date" placeholder="天">
     <input v-if="project.type == '时间长度'" v-model="project.hour" placeholder="小时">
     <input v-if="project.type == '时间长度'" v-model="project.minute" placeholder="分钟">
@@ -180,6 +181,7 @@
   <script src="vendor/lodash.js"></script>
   <script src="vendor/moment.min.js"></script>
   <script src="vendor/require.js"></script>
+  <script src="vendor/jscolor.js"></script>
   <!-- Data -->
   <script src="data.js"></script>
 </body>

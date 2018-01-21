@@ -9,7 +9,8 @@ var app = new Vue({
         month: '',
         date: '',
         hour: '',
-        minute: ''
+        minute: '',
+        color: ''
       },
     	timers: [
       	
@@ -22,22 +23,27 @@ var app = new Vue({
   },
   methods: {
     set: function (event) {
-      if(this.type == '时间点') {
-        newTimer = { name: this.project.title, type: 2, pause: false, timestamp: moment().set({'month': this.project.month - 1, 'date': this.project.date, 'hour': this.project.hour, 'minute': this.project.minute, 'second': 0}).valueOf(), countdown: 0, percent: 0 }
+      var color = "#" + $(".jscolor").val()
+      var sColorChange = [];
+      for (var i = 1; i < 7; i += 2) {
+          sColorChange.push(parseInt("0x" + color.slice(i, i + 2)));    
+      }
+      color = "rgba(" + sColorChange.join(",") + ",0.3)";
+      if(this.project.type == '时间点') {
+        newTimer = { name: this.project.title, type: 2, color: color, pause: false, timestamp: moment().set({'month': this.project.month - 1, 'date': this.project.date, 'hour': this.project.hour, 'minute': this.project.minute, 'second': 0}).valueOf(), countdown: 0, percent: 0 }
       }
       else {
-        newTimer = { name: this.project.title, type: 1, pause: false, timestamp: moment().add({'days': this.project.date, 'hours': this.project.hour, 'minutes': this.project.minute}).valueOf(), countdown: 0, percent: 0 }
+        newTimer = { name: this.project.title, type: 1, color: color, pause: false, timestamp: moment().add({'days': this.project.date, 'hours': this.project.hour, 'minutes': this.project.minute}).valueOf(), countdown: 0, percent: 0 }
       }
+      console.log(newTimer.color)
       this.timers.push(newTimer)
       this.runTimer(true)
     },
     pause: function (timer) {
       if(timer.pause == false) {
-        console.log(timer.pause)
         timer.pause = true
       }
       else {
-        console.log(timer.pause)
         timer.timestamp = moment() + timer.countdown * 1000
         timer.pause = false
       }
