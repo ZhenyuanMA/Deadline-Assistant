@@ -35,7 +35,6 @@ var app = new Vue({
       else {
         newTimer = { name: this.project.title, type: 1, color: color, pause: false, timestamp: moment().add({'days': this.project.date, 'hours': this.project.hour, 'minutes': this.project.minute}).valueOf(), countdown: 0, percent: 0 }
       }
-      console.log(newTimer.color)
       this.timers.push(newTimer)
       this.runTimer(true)
     },
@@ -47,6 +46,15 @@ var app = new Vue({
         timer.timestamp = moment() + timer.countdown * 1000
         timer.pause = false
       }
+    },
+    remove: function (timer) {
+      var index
+      for(var i = 0; i < this.timers.length; i++) {
+        if(this.timers[i].name === timer.name && this.timers[i].countdown == 0) {
+          index = i
+        }
+      }
+      this.timers.splice(index, 1);
     },
   	format (time, format) {
     	return moment(time).format(format)

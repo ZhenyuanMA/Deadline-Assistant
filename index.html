@@ -17,7 +17,8 @@
     <div v-for="timer in timers">
       <span>{{timer.name}}</span>
       <span>{{timeDiff(timer.countdown)}}</span>
-      <input v-if="timer.type == 1" v-on:click="pause(timer)" type="button" :value="timer.pause ? '继续' : '暂停'" :id="'btn'+timer.name"></input>
+      <input class="button" v-if="timer.type == 1" v-on:click="pause(timer)" type="button" :value="timer.pause ? '继续' : '暂停'" :id="'btn'+timer.name"></input>
+      <input class="button" v-if="timer.countdown == 0" v-on:click="remove(timer)" type="button" value="已完成"></input>
     </div>
     <p><b>Input Area:</b></p>
     <input v-model="project.title" placeholder="Project Title">
@@ -26,7 +27,7 @@
       <option>时间长度</option>
       <option>时间点</option>
     </select>
-    <input placeholder="Timeline Color" class="jscolor" value="965BAB">
+    <input placeholder="Timeline Color" class="jscolor" value="ee88ff">
     <input v-if="project.type == '时间长度'" v-model="project.date" placeholder="天">
     <input v-if="project.type == '时间长度'" v-model="project.hour" placeholder="小时">
     <input v-if="project.type == '时间长度'" v-model="project.minute" placeholder="分钟">
@@ -169,7 +170,7 @@
       <option>58</option>
       <option>59</option>
     </select>
-    <button v-on:click="set">确认添加</button>
+    <button class="button" v-on:click="set">确认添加</button>
   </div>
   
   <!-- Vue -->
