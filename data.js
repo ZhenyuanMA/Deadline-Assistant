@@ -21,7 +21,7 @@ var app = new Vue({
   },
   mounted () {
     localforage.getItem('timers').then((data) => {
-      this.timer = JSON.parse(data)
+      this.timers = JSON.parse(data)
     })
   	this.runTimer(true)
   	setInterval(this.runTimer.bind(this), 1000)
