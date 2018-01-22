@@ -22,6 +22,12 @@ var app = new Vue({
   mounted () {
     localforage.getItem('timers').then((data) => {
       this.timers = JSON.parse(data)
+      for (let i in this.timers) {
+        let timer = this.timers[i]
+        if(timer.pause == true) {
+          timer.timestamp = moment() + timer.countdown * 1000
+        }
+      }
     })
   	this.runTimer(true)
   	setInterval(this.runTimer.bind(this), 1000)
@@ -47,10 +53,12 @@ var app = new Vue({
     pause: function (timer) {
       if(timer.pause == false) {
         timer.pause = true
+        localforage.setItem("timers", JSON.stringify(this.timers))
       }
       else {
         timer.timestamp = moment() + timer.countdown * 1000
         timer.pause = false
+        localforage.setItem("timers", JSON.stringify(this.timers))
       }
     },
     remove: function (timer) {
