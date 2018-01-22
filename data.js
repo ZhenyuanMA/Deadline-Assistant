@@ -1,3 +1,5 @@
+//localforage.setDriver(localforage.LOCALSTORAGE)
+
 var app = new Vue({
 	el: '#app',
   data () {
@@ -18,6 +20,9 @@ var app = new Vue({
     }
   },
   mounted () {
+    localforage.getItem('timers').then((data) => {
+      this.timer = JSON.parse(data)
+    })
   	this.runTimer(true)
   	setInterval(this.runTimer.bind(this), 1000)
   },
@@ -37,6 +42,7 @@ var app = new Vue({
       }
       this.timers.push(newTimer)
       this.runTimer(true)
+      localforage.setItem("timers", JSON.stringify(this.timers))
     },
     pause: function (timer) {
       if(timer.pause == false) {
@@ -55,6 +61,7 @@ var app = new Vue({
         }
       }
       this.timers.splice(index, 1);
+      localforage.setItem("timers", JSON.stringify(this.timers))
     },
   	format (time, format) {
     	return moment(time).format(format)
