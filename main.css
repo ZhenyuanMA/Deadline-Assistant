@@ -1,6 +1,21 @@
+h1 {
+  text-align: center;
+}
+
+#app {
+  margin: 15px;
+}
+
+.select {
+  float: left;
+  width: 33%;
+  text-align: center;
+}
+
 .timeline {
   position: relative;
   height: 14px;
+  border-radius: 5px;
   background: #ccc;
 }
 

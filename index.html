@@ -8,18 +8,35 @@
   <title>Deadline Assistant</title>
 </head>
 <body>
+  <h1>Deadline Assistant</h1>
+
   <div id="app">
-    <h1>Deadline Assistant</h1>
-    <div class="timeline">
-      <div class="timeline-inner" v-for="timer in timers" :style="{ width: `${timer.percent*100}%`, background: `${timer.color}` }">
-      </div>
-    </div>
     <div v-for="timer in timers">
-      <span>{{timer.name}}</span>
-      <span>{{timeDiff(timer.countdown)}}</span>
+      <span :style="{ background: `${timer.color}` }">{{timer.name}}</span>
+      <span :style="{ background: `${timer.color}` }">{{timeDiff(timer.countdown)}}</span>
       <input class="button" v-if="timer.type == 1" v-on:click="pause(timer)" type="button" :value="timer.pause ? '继续' : '暂停'" :id="'btn'+timer.name"></input>
       <input class="button" v-if="timer.countdown == 0" v-on:click="remove(timer)" type="button" value="已完成"></input>
     </div>
+
+    <div class="timeline" v-if="selected == 0">
+      <div class="timeline-inner" v-for="timer in timers" :style="{ width: `${timer.percent*100}%`, background: `${timer.color}` }">
+      </div>
+    </div>
+    <div class="timeline" v-if="selected == 1">
+      <div class="timeline-inner" v-for="timer in timers" :style="{ width: `${timer.countdown*100/timer.total}%`, background: `${timer.color}` }">
+      </div>
+    </div>
+    <div class="timeline" v-if="selected == 2">
+      <div class="timeline-inner" v-for="timer in timers" :style="{ width: `${100 - timer.countdown*100/timer.total}%`, background: `${timer.color}` }">
+      </div>
+    </div>
+
+    <div>
+      <div class="select" v-on:click="select(0)">[倒计时追逐]</div>
+      <div class="select" v-on:click="select(1)">[百分比追逐]</div>
+      <div class="select" v-on:click="select(2)">[百分比完成]</div>
+    </div>
+    
     <p><b>Input Area:</b></p>
     <input v-model="project.title" placeholder="Project Title">
     <select v-model="project.type">

@@ -4,6 +4,7 @@ var app = new Vue({
 	el: '#app',
   data () {
   	return {
+      selected: 0,
       max: 0,
       project: {
         title: '',
@@ -15,7 +16,14 @@ var app = new Vue({
         color: ''
       },
     	timers: [
-      	
+        // name
+        // type
+        // color
+        // pause
+        // timestamp
+        // countdown
+        // percent
+        // total
       ]
     }
   },
@@ -37,14 +45,16 @@ var app = new Vue({
       var color = "#" + $(".jscolor").val()
       var sColorChange = [];
       for (var i = 1; i < 7; i += 2) {
-          sColorChange.push(parseInt("0x" + color.slice(i, i + 2)));    
+          sColorChange.push(parseInt("0x" + color.slice(i, i + 2)));   
       }
-      color = "rgba(" + sColorChange.join(",") + ",0.3)";
+      color = "rgba(" + sColorChange.join(",") + ",0.3)"
       if(this.project.type == '时间点') {
-        newTimer = { name: this.project.title, type: 2, color: color, pause: false, timestamp: moment().set({'month': this.project.month - 1, 'date': this.project.date, 'hour': this.project.hour, 'minute': this.project.minute, 'second': 0}).valueOf(), countdown: 0, percent: 0 }
+        var totalTime = Math.floor(moment().set({'month': this.project.month - 1, 'date': this.project.date, 'hour': this.project.hour, 'minute': this.project.minute, 'second': 0}).diff(moment()) / 1000)
+        newTimer = { name: this.project.title, type: 2, color: color, pause: false, timestamp: moment().set({'month': this.project.month - 1, 'date': this.project.date, 'hour': this.project.hour, 'minute': this.project.minute, 'second': 0}).valueOf(), countdown: 0, percent: 0, total: totalTime }
       }
       else {
-        newTimer = { name: this.project.title, type: 1, color: color, pause: false, timestamp: moment().add({'days': this.project.date, 'hours': this.project.hour, 'minutes': this.project.minute}).valueOf(), countdown: 0, percent: 0 }
+        var totalTime = Math.floor(moment().add({'days': this.project.date, 'hours': this.project.hour, 'minutes': this.project.minute}).diff(moment()) / 1000)
+        newTimer = { name: this.project.title, type: 1, color: color, pause: false, timestamp: moment().add({'days': this.project.date, 'hours': this.project.hour, 'minutes': this.project.minute}).valueOf(), countdown: 0, percent: 0, total: totalTime }
       }
       this.timers.push(newTimer)
       this.runTimer(true)
@@ -99,6 +109,9 @@ var app = new Vue({
           }
         }
       }
+    },
+    select (type) {
+      this.selected = type
     }
   }
 })
